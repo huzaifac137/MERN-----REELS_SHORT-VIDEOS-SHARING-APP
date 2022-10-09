@@ -1,0 +1,177 @@
+const VIDEO = require("../MODELS/video");
+const USER = require("../MODELS/user");
+require("dotenv").config();
+const jwt = require("jsonwebtoken");
+const fs = require("fs");
+
+const postVideos=async(req,res,next)=>
+{
+
+    let userExists;
+    try
+    {
+      userExists = await USER.findById(req.body.creator);
+    }
+
+    catch(err)
+    {
+        const error = new Error("SOMETHING WENT WRONG FINDING THIS USER");
+        console.log("ERROR : " + err);
+        error.code =500;
+        return next(error);
+    }
+
+    if(!userExists)
+    {
+        const error = new Error("USER DOESNT EXIST");
+        error.code = 404;
+        return next(error);
+    }
+
+    let creatorUN = userExists.username;
+      
+    let newVideo;
+
+       newVideo =  new VIDEO({
+        title : req.body.title ,
+        file :   req.file.path ,
+        creator : req.body.creator ,
+        creatorUsername : creatorUN
+       });
+
+
+   try
+   {
+     await newVideo.save();
+     userExists.videos.push(newVideo);
+     await userExists.save();
+   }
+
+   catch(err)
+   {
+    const error = new Error("SOMETHING WENT WRONG");
+    console.log("ERROR : " + err);
+    error.code =500;
+    return next(error);
+   }
+
+
+
+   res.status(201).json({message : "VIDEO POSTED SUCCESSFULLY"});
+    
+};
+
+const getVideos=async(req, res ,next)=>
+{
+    let videos;
+     try
+     {
+       videos = await VIDEO.find({});
+     }
+
+     catch(err)
+     {
+      const error = new Error("SOMETHING WENT WRONG");
+      error.code =500;
+      return next(error);
+     }
+
+     res.status(200).json({videos : videos.map((video)=>video.toObject({getters:true}))});
+
+};
+
+const getVideosByUser =async(req,res,next)=>
+{
+   const{username} = req.params; 
+
+   let userVideos;
+   try
+   {
+      userVideos = await VIDEO.find({creatorUsername : username});
+   }
+
+   catch(err)
+     {
+      const error = new Error("SOMETHING WENT WRONG");
+      error.code =500;
+      return next(error);
+     }
+
+     res.status(200).json({userVideos : userVideos.map((item)=>item.toObject({getters:true})  )});
+     
+}
+
+const deleteVideo=async(req ,res ,next)=>{
+          
+  const{ token , creator} = req.headers;
+  const{id} = req.params;
+
+  
+  let video;
+  try
+  {
+     video = await VIDEO.findById(id).populate("creator");
+  }
+
+  catch(err)
+  {
+    const error = new Error("SOMETHING WENT WRONG");
+    console.log(err);
+    error.code =500;
+    return next(error);
+  }
+
+
+  let extractedToken;
+
+  try
+  {
+     extractedToken =  jwt.verify(token , process.env.JWT_KEY);
+  }
+
+  catch(err)
+  {
+    const error = new Error("SOMETHING WENT WRONG");
+    console.log(err);
+    error.code =500;
+    return next(error);
+  }
+
+  let userId = extractedToken.userId;
+
+  if(userId!==creator)
+  {
+    const error = new Error("NON - AUTHORIZED USER");
+    error.code = 403;
+    return next(error);
+  }
+
+  
+
+  try
+  {
+    video.creator.videos.pull(video);
+    await video.creator.save();
+    fs.unlink(video.file , err=>{
+      
+    });
+    await video.remove();
+
+  }
+
+  catch(err)
+  {
+    const error = new Error("SOMETHING WENT WRONG");
+    console.log(err);
+    error.code =500;
+    return next(error);
+  }
+
+  res.status(201).json({message : "VIDEO SUCCESSFULLY DELETED"});
+
+};
+
+exports.getVideos = getVideos;
+exports.getVideosByUser = getVideosByUser;
+exports.postVideos=postVideos;
+exports.deleteVideo = deleteVideo;

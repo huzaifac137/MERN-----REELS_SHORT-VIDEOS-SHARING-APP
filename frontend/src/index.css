@@ -1,0 +1,195 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: rgb(209, 207, 207);
+}
+
+code {
+  font-family:  Arial, Helvetica, sans-serif;
+}
+
+.productsWrapper
+{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.card
+{
+  background-color: white;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   padding: 10px;
+   text-align: center;
+   border-radius: 20px;
+   margin: 15px;
+   width: 400px;
+
+}
+
+.cardFooter
+{
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  align-self: flex-start;
+  width: 85%;
+
+}
+
+
+
+.card img 
+{
+  height: 80px;
+  width: 80px;
+}
+
+.btn
+{
+  text-align: center;
+  color: white;
+  background-color: rgb(151, 39, 151);
+  border-radius: 3px;
+  border: none;
+  width: 80px;
+}
+
+.cartCount
+{
+  color: black;
+  font-weight: bold;
+  margin: 20px;
+}
+
+.navlinks a
+{
+  text-decoration: none;
+  color: gray;
+  font-size: larger;
+  padding: 5px;
+}
+
+.navlinks a.active
+{
+  border-bottom: 1px solid black;
+  color: black;
+}
+
+
+.auth
+{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 400px;
+  width: 80%;
+  margin: 100px auto;
+  justify-content: space-evenly;
+  border: 1px solid grey;
+}
+
+.input
+{
+  width: 65%;
+  height: 35px;
+  border-radius: 2px;
+  background-color: transparent;
+  padding: 2px;
+  border: none;
+  border-bottom: 1px solid grey;
+}
+
+.invalid
+{
+  width: 65%;
+  height: 35px;
+  border-radius: 2px;
+  background-color: salmon;
+  padding: 2px;
+  border: none;
+  border-bottom: 1px solid red;
+}
+
+.btn-danger
+{
+  background-color: rgb(204, 29, 29);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  
+}
+
+.profile
+{
+  display: flex;
+ flex-direction: column;
+  margin: 150px auto;
+  width: 90%;
+  text-align: center;
+  
+}
+
+.uploader
+{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  height: 500px;
+}
+
+@media only screen and (max-width:600px)
+{ 
+   .profile
+  {
+     width: 96%;
+     max-width: 97%;
+     margin: 70px auto;
+     border-top: 1px solid grey;
+
+  } 
+
+  .card
+  {
+    width: 370px;
+    max-width: 90%;
+  }
+
+  .vid
+  {
+    width: 370px;
+    max-width: 95%;
+  }
+
+  .uploader
+  {
+    width: 90%;
+  }
+
+  .navbar
+  {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     justify-content: center;
+     height: 150px; 
+  }
+
+  .navlinks
+  {
+    margin-top: 10px;
+    padding-left: 5px;
+  }
+
+ .auth
+ {
+  width: 90%;
+ }
+
+}

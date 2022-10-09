@@ -5,11 +5,14 @@ const videoUploader = require("../videoUploader/multer");
 const getVideosByUser = require("../CONTROLLERS/videoControllers").getVideosByUser;
 const deleteVideo = require("../CONTROLLERS/videoControllers").deleteVideo;
 
+
+const auth = require("../Auth");
+
 const router = express.Router();
 
 router.get("/" , getVideos);
 router.get("/:username" , getVideosByUser );
-router.post("/upload" , videoUploader.single("file") , postVideos);
-router.delete("/:id/delete" , deleteVideo );
+router.post("/upload" , auth ,  videoUploader.single("file") , postVideos);
+router.delete("/:id/delete" , auth , deleteVideo );
 
 module.exports = router;

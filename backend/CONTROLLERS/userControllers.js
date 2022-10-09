@@ -150,7 +150,7 @@ const login = async(req , res , next)=>{
 
       try
       {
-        token =  jwt.sign({userId : emailExists.id , email : emailExists.email} , process.env.JWT_KEY, {});
+        token =  jwt.sign({userId : emailExists.id , email : emailExists.email , username : emailExists.username} , process.env.JWT_KEY, {});
       }
 
       catch(err)

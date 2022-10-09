@@ -7,36 +7,49 @@ const fs = require("fs");
 const postVideos=async(req,res,next)=>
 {
 
-    let userExists;
+   
+
+    let userExists ;
+
     try
     {
-      userExists = await USER.findById(req.body.creator);
+        userExists = await USER.findById(req.body.creator);
     }
 
     catch(err)
     {
-        const error = new Error("SOMETHING WENT WRONG FINDING THIS USER");
-        console.log("ERROR : " + err);
-        error.code =500;
-        return next(error);
+      const error = new Error("SOMETHING WENT WRONG");
+      console.log(err);
+      error.code = 500;
+      return next(error);
     }
 
     if(!userExists)
     {
-        const error = new Error("USER DOESNT EXIST");
-        error.code = 404;
-        return next(error);
+      const error = new Error("USER DOESNT EXIST");
+      console.log(err);
+      error.code = 400;
+      return next(error);
     }
 
-    let creatorUN = userExists.username;
+    let creatorUsername = req.extractedUsername;
+    let creatorUserId = req.extractedUserId;
+
+
+    if(creatorUserId!==req.body.creator)
+    {
+      const error = new Error("NON - AUTHORIZED USER");
+      error.code = 403;
+      return next(error);
+    }
       
     let newVideo;
 
        newVideo =  new VIDEO({
         title : req.body.title ,
         file :   req.file.path ,
-        creator : req.body.creator ,
-        creatorUsername : creatorUN
+        creator : creatorUserId ,
+        creatorUsername : creatorUsername
        });
 
 
@@ -103,7 +116,7 @@ const getVideosByUser =async(req,res,next)=>
 
 const deleteVideo=async(req ,res ,next)=>{
           
-  const{ token , creator} = req.headers;
+  const{creator} = req.headers;
   const{id} = req.params;
 
   
@@ -121,23 +134,7 @@ const deleteVideo=async(req ,res ,next)=>{
     return next(error);
   }
 
-
-  let extractedToken;
-
-  try
-  {
-     extractedToken =  jwt.verify(token , process.env.JWT_KEY);
-  }
-
-  catch(err)
-  {
-    const error = new Error("SOMETHING WENT WRONG");
-    console.log(err);
-    error.code =500;
-    return next(error);
-  }
-
-  let userId = extractedToken.userId;
+  const userId = req.extractedUserId;
 
   if(userId!==creator)
   {

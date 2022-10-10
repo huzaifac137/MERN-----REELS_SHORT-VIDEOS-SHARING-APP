@@ -1,11 +1,14 @@
 import React, { useEffect, useState ,useRef, useContext} from 'react';
 import { useNavigate } from 'react-router-dom';
 import authContext from '../CONTEXT/AuthContext';
+import {AiFillHeart, AiOutlineHeart} from "react-icons/ai";
 
-function Card({title , file , creatorUsername ,id , creator , likes }) {
+function Card({title , file , creatorUsername ,id , creator , likes , likesArrayItem }) {
     
     const[playPause , setPlayPause] = useState("pause");
     const[responseMessage , setResponseMsg] = useState();
+    const[isLiked , setIsLiked] = useState(false);
+
     const videoRef = useRef();
 
     const navigate = useNavigate();
@@ -87,6 +90,7 @@ function Card({title , file , creatorUsername ,id , creator , likes }) {
        }
 
        ctx.setLikes(responseData.likes);
+
     }
 
     catch(err)
@@ -97,7 +101,18 @@ function Card({title , file , creatorUsername ,id , creator , likes }) {
    }
 
 
+   let likeButton ;
 
+   if(likesArrayItem.filter((item)=>item===ctx.userId).length>0)
+   {
+    likeButton = <AiFillHeart/>
+   }
+
+   else
+   {
+    likeButton = <AiOutlineHeart/>
+   }
+ 
     return (
         <div className='card'>
 
@@ -110,8 +125,8 @@ function Card({title , file , creatorUsername ,id , creator , likes }) {
           <source src={`${process.env.REACT_APP_SERVER_URL}${file}`}  /> 
           </video>
 
-          <div style={{display:"flex" , alignItems:"center" , justifyContent:"space-around" , width:"30%"}}>
-          <button onClick={likeHandler}> LIKE </button>
+          <div style={{display:"flex" , alignItems:"center"  , width:"100%" }}>
+          <h3 onClick={likeHandler} style={{marginRight:"10px"}}> {likeButton} </h3>
           <h4> {likes} LIKES</h4> 
           </div>
          

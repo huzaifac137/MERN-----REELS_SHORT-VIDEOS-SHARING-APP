@@ -26,6 +26,7 @@ function Home(props) {
             }
 
             setAllVideos(responseData.videos);
+            console.log(responseData.videos);
           
             return;
 
@@ -53,7 +54,7 @@ function Home(props) {
     {ERROR && <h2> {ERROR} </h2>}
     <h2> VIDEOS </h2>
       {allVideos.map((video)=> <Card key={video.id} title={video.title} file={video.file} 
-      creatorUsername={video.creatorUsername} likes={video.likes.length} id={video.id} />)}
+      creatorUsername={video.creatorUsername} likes={video.likes.length} id={video.id} likesArrayItem={video.likes} />)}
      </div>
   );
 }

@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import Card from './COMPONENTS/Card';
+import authContext from './CONTEXT/AuthContext';
 
 function UserProfile({}) {
-
+     
+    const ctx = useContext(authContext);
     const location = useLocation();
     const params = useParams();
     const state = location.state;
@@ -44,6 +46,7 @@ function UserProfile({}) {
               
            
             setVideos(responseData.userVideos);
+            console.log(responseData.userVideos);
             setIsLoading(false);
         }
 
@@ -58,7 +61,7 @@ function UserProfile({}) {
     
         getVideosByUser();
 
-  } ,[username]);
+  } ,[ctx.likes , username]);
 
   if(ERROR)
   {
@@ -67,12 +70,7 @@ function UserProfile({}) {
     )
   };
 
-    if(VIDEOS.length===0)
-    {
-        return (
-            <h2> THIS USER HAS NOT POSTED ANY VIDEOS </h2>
-        )
-    }
+
  
     return (
         <div className='profile'>
@@ -87,7 +85,8 @@ function UserProfile({}) {
         
         <div style={{display:"flex" , flexDirection:"column" , alignItems:"center"}}>
         {VIDEOS.map((video)=> <Card key={video.id} id={video.id} file={video.file}  
-        creatorUsername={video.creatorUsername} title={video.title} creator ={video.creator} likes={video.likes.length} />  )}
+        creatorUsername={video.creatorUsername} title={video.title} creator ={video.creator} 
+        likes={video.likes.length} likesArrayItem={video.likes} />  )}
         </div>
             
         </> }

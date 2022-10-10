@@ -26,6 +26,6 @@ This is a short video / reels sharing app in which you can :
 3) Delete your Reels
 4) Like other people / your own  reels
 5) Main Homepage contains all reels available in the database.
-
+6) Fully Responsive UI
 
 If you like this app support me by giving a star or fork

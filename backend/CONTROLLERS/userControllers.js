@@ -2,11 +2,22 @@
 const USER = require("../MODELS/user");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const {validationResult} = require("express-validator");
 require("dotenv").config();
 
 const signup = async(req, res ,next)=>{
  
     const{username ,email , password} = req.body;
+
+    const errors = validationResult(req);
+
+    if(!errors.isEmpty())
+    {
+        const error = new Error("PLZ ENTER REQUIRED FEILD PARAMETERS CORRECTLY");
+        error.code = 400;
+        return next(error);
+    }
+
 
     let alreadyExists;
     try
@@ -38,7 +49,7 @@ const signup = async(req, res ,next)=>{
     let usernameAlreadyExists;
     try
     {
-        usernameAlreadyExists = await USER.find({username : username});
+        usernameAlreadyExists = await USER.findOne({username : username});
     }
 
     catch
@@ -97,6 +108,14 @@ const signup = async(req, res ,next)=>{
 const login = async(req , res , next)=>{
 
     const{email , password} = req.body;
+    const errors = validationResult(req);
+
+    if(!errors.isEmpty())
+    { 
+        const error = new Error("PLZ ENTER REQUIRED FEILD PARAMETERS CORRECTLY");
+        error.code = 400;
+        return next(error);
+    }
 
     let emailExists;
     try
@@ -111,12 +130,7 @@ const login = async(req , res , next)=>{
         return next(error);
     }
 
-    if(email.trim()=="" || password.trim()=="")
-    {
-        const error = new Error("FEILDS ARE EMPTY , PLEASE ENTER DATA");
-        error.code= 401;
-        return next(error);
-    }
+
 
     if(!emailExists)
     {

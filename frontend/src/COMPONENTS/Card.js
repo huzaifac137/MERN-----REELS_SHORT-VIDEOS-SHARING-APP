@@ -2,7 +2,7 @@ import React, { useEffect, useState ,useRef, useContext} from 'react';
 import { useNavigate } from 'react-router-dom';
 import authContext from '../CONTEXT/AuthContext';
 
-function Card({title , file , creatorUsername ,id , creator }) {
+function Card({title , file , creatorUsername ,id , creator , likes }) {
     
     const[playPause , setPlayPause] = useState("pause");
     const[responseMessage , setResponseMsg] = useState();
@@ -65,6 +65,38 @@ function Card({title , file , creatorUsername ,id , creator }) {
         }
    }
 
+   const likeHandler=async()=>{
+          
+    let responseData;
+    try
+    {
+       const response = await fetch(`${process.env.REACT_APP_SERVER_URL}api/videos/${id}/likes` ,{
+
+        method :"POST" ,
+
+        headers : {
+            "token" : ctx.token ,
+        } 
+       });
+
+       responseData = await response.json();
+
+       if(response.status!==201) 
+       {
+        throw new Error(responseData.message);
+       }
+
+       ctx.setLikes(responseData.likes);
+    }
+
+    catch(err)
+    {
+     
+    }
+
+   }
+
+
 
     return (
         <div className='card'>
@@ -78,12 +110,17 @@ function Card({title , file , creatorUsername ,id , creator }) {
           <source src={`${process.env.REACT_APP_SERVER_URL}${file}`}  /> 
           </video>
 
+          <div style={{display:"flex" , alignItems:"center" , justifyContent:"space-around" , width:"30%"}}>
+          <button onClick={likeHandler}> LIKE </button>
+          <h4> {likes} LIKES</h4> 
+          </div>
+         
           <div className='cardFooter'>
-
           <h3 style={{cursor:"pointer"}} onClick={handleProfile}>{creatorUsername}</h3> 
            <h6 style={{marginLeft:"10px" }}> {title}</h6> 
-
+           
           </div> 
+
 
         { creator===ctx.userId && <button type='button' className='btn-danger' onClick={handleDelete} > DELETE</button> }
   

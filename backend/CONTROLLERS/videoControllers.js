@@ -49,7 +49,8 @@ const postVideos=async(req,res,next)=>
         title : req.body.title ,
         file :   req.file.path ,
         creator : creatorUserId ,
-        creatorUsername : creatorUsername
+        creatorUsername : creatorUsername ,
+        likes : []
        });
 
 
@@ -168,7 +169,65 @@ const deleteVideo=async(req ,res ,next)=>{
 
 };
 
+const onLike=async(req ,res , next)=>{
+      
+  const{id} = req.params;
+  const{creator} = req.headers;
+
+  let video;
+    try
+    {
+      video = await VIDEO.findById(id);
+    }
+
+    catch(err)
+    {
+      const error = new Error("SOMETHING WENT WRONG");
+      console.log(err);
+      error.code =500;
+      return next(error);
+    }
+
+
+    
+  const userId = req.extractedUserId;
+
+  if(!userId)
+  {
+    const error = new Error("NON - AUTHORIZED USER");
+    error.code = 403;
+    return next(error);
+  }
+
+  try
+  {
+
+   if( video.likes.filter((item)=>item.toString()===userId).length>0)
+   {
+    console.log("ALREADY LIKED");
+    return ;
+   }
+
+    video.likes.push(userId);
+    await video.save();
+  }
+
+  catch(err)
+    {
+      const error = new Error("SOMETHING WENT WRONG");
+      console.log(err);
+      error.code =500;
+      return next(error);
+    }
+
+    res.status(201).json({likes : video.likes});
+
+   
+
+};
+
 exports.getVideos = getVideos;
 exports.getVideosByUser = getVideosByUser;
 exports.postVideos=postVideos;
 exports.deleteVideo = deleteVideo;
+exports.onLike = onLike;

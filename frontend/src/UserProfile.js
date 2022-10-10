@@ -87,7 +87,7 @@ function UserProfile({}) {
         
         <div style={{display:"flex" , flexDirection:"column" , alignItems:"center"}}>
         {VIDEOS.map((video)=> <Card key={video.id} id={video.id} file={video.file}  
-        creatorUsername={video.creatorUsername} title={video.title} creator ={video.creator} />  )}
+        creatorUsername={video.creatorUsername} title={video.title} creator ={video.creator} likes={video.likes.length} />  )}
         </div>
             
         </> }

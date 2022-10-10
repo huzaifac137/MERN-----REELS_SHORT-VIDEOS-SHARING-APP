@@ -1,6 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import authContext from '../CONTEXT/AuthContext';
 
 function VideoUploader(props) {
+
+    const ctx = useContext(authContext);
 
     const[VIDEO , setVIDEO] = useState();
     const[isValid , setIsValid] = useState(false);
@@ -55,15 +58,19 @@ function VideoUploader(props) {
         e.preventDefault();
 
         let response , responseData;
-        const userId = JSON.parse(localStorage.getItem("userId"));
+
         const formData = new FormData();
         formData.append("file" , VIDEO);
         formData.append("title" , TITLE);
-       formData.append("creator" , userId);
+       formData.append("creator" , ctx.userId);
         try
         {
              response = await fetch(`${process.env.REACT_APP_SERVER_URL}api/videos/upload` , {
                 method :"POST" ,
+
+                headers : {
+                    "token" : ctx.token
+                } ,
                 
                 body : formData
 

@@ -17,6 +17,7 @@ function App() {
   const[USERNAME , setUsername] = useState();
   const[TOKEN, setToken] = useState();
   const[USERID , setUserId] = useState();
+  const[LIKES , setLikes] = useState();
 
   useEffect(()=>{
          
@@ -36,7 +37,7 @@ function App() {
   return (
     
     <authContext.Provider value={{username : USERNAME , email : EMAIL , token : TOKEN , userId : USERID , setUsername : setUsername ,
-    setEmail :setEmail , setToken : setToken , setUserId : setUserId }} >
+    setEmail :setEmail , setToken : setToken , setUserId : setUserId  , setLikes: setLikes , likes : LIKES}} >
 
     <BrowserRouter>
     <Navbar/>

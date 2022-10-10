@@ -15,3 +15,17 @@ To play or pause the video you have to click / press on the video
 ` .env File`
 
 Include your own .env file with the same variable names as in my code to run the code properly
+
+
+`Details about this app` 
+
+This is a short video / reels sharing app in which you can :
+
+1) Create Your Account
+2) Upload Your Reels
+3) Delete your Reels
+4) Like other people / your own  reels
+5) Main Homepage contains all reels available in the database.
+
+
+If you like this app support me by giving a star or fork

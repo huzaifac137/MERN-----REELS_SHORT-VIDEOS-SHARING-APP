@@ -5,9 +5,11 @@
 
 Do this in both frontend and backend folders so project can install all required dependencies
 
-` uploads/videos`
+` include folder uploads/videos`
 
 In backend Folder , create your own folder with name uploads and further create videos folder in that uploads folder.
+
+
 ` click / press on video `
 
 

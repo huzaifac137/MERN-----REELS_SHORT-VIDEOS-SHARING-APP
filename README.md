@@ -1,5 +1,12 @@
 # REELS / SHORT VIDEOS SHARING APP
  
+`KEY Features`
+ 1) User Login and Signup
+ 2) Authentication and authorization using JWT
+ 3) Uploading your video reels as posts.
+ 4) Everything stored in mongodb
+ 5) Likes on posts
+
 
 `npm install`
 

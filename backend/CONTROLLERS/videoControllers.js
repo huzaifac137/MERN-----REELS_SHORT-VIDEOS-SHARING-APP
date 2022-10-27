@@ -169,6 +169,7 @@ const deleteVideo=async(req ,res ,next)=>{
 
 };
 
+
 const onLike=async(req ,res , next)=>{
       
   const{id} = req.params;
@@ -204,12 +205,15 @@ const onLike=async(req ,res , next)=>{
 
    if( video.likes.filter((item)=>item.toString()===userId).length>0)
    {
-    console.log("ALREADY LIKED");
-    return ;
+    video.likes.pull(userId);
+    await video.save();
    }
-
+   else
+   {
     video.likes.push(userId);
     await video.save();
+   }
+    
   }
 
   catch(err)
@@ -220,9 +224,8 @@ const onLike=async(req ,res , next)=>{
       return next(error);
     }
 
-    res.status(201).json({likes : video.likes});
+    res.status(201).json({likes : video.likes });
 
-   
 
 };
 

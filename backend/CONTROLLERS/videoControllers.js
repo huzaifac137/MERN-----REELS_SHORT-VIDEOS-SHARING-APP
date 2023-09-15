@@ -128,7 +128,6 @@ const deleteVideo=async(req ,res ,next)=>{
   catch(err)
   {
     const error = new Error("SOMETHING WENT WRONG");
-  
     error.code =500;
     return next(error);
   }
